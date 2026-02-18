@@ -3,6 +3,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
+import java.util.Scanner;
 
 public class TravelPlanner {
 
@@ -68,4 +69,53 @@ public class TravelPlanner {
         return LocalDate.parse(dateStr,formatter);
     }
 
+    public static void main (String []args){
+
+        boolean running =  true;
+        Scanner scanner = new Scanner(System.in);
+        int choice;
+
+        System.out.println("Welcome to Travel Planner");
+        System.err.println("==========================");
+
+        System.out.println("All dates should be entered in format dd/MM/yyyy");
+
+        while(running){
+
+            System.out.println("\nChoose an option:");
+            System.out.println("1. Calculate trip duration");
+            System.out.println("2. Validate travel dates");
+            System.out.println("3. Calculate hotel check-in and check-out");
+            System.out.println("4. Check if trip overlaps with a holiday");
+            System.out.println("5. Exit");
+            System.out.print("Enter your choice (1-5): ");
+
+            choice = Integer.parseInt(scanner.nextLine());
+
+            LocalDate departureDate;
+            LocalDate returnDate;
+
+
+            if(choice == 5){
+                running = false;
+                return;
+            }
+
+            switch (choice) {
+                case 1:
+                    System.out.println("\nEnter departure date: ");
+                    String departure = scanner.nextLine();
+
+                    System.out.println("\nEnter return date: ");
+                    String returned = scanner.nextLine();
+
+                    departureDate = parseDate(departure);
+                    returnDate = parseDate(returned);
+
+                    System.out.println("Trip duration: " + calculateTripDuration(departureDate, returnDate) + " days");
+                    break;
+                
+            }
+        }
+    }
 }
