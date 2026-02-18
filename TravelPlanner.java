@@ -1,12 +1,13 @@
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 
 public class TravelPlanner {
 
-    String pattern = "dd/MM/yyyy";
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+    private static final String pattern = "dd/MM/yyyy";
+    private static final  DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
 
     //calculate the duration of trip in days
     public static long calculateTripDuration(LocalDate departureDate, LocalDate returnDate) {
@@ -42,6 +43,29 @@ public class TravelPlanner {
 
         return true;
 
+    }
+
+    //Calculates hotel check-in and check-out dates based on travel dates
+    public static String calculateHotelDates(LocalDate departureDate, LocalDate returnDate){
+
+        String checkInDate = departureDate.format(formatter);
+        String checkOutDate = returnDate.format(formatter);
+
+        return "Hotel CheckIn Date: " + checkInDate + " Hotel CheckOut Date: " + checkOutDate;
+        
+    } 
+
+    //Checks if a trip overlaps with a specific holiday
+    public static boolean holidayOverlap (LocalDate departureDate, LocalDate returnDate, LocalDate holiday){
+
+        return (holiday.isEqual(departureDate) || holiday.isEqual(returnDate)||
+        (holiday.isAfter(departureDate) && holiday.isBefore(returnDate)));
+    }
+
+    //Parses a date string into a LocalDate object
+    private static LocalDate parseDate (String dateStr) throws DateTimeParseException {
+
+        return LocalDate.parse(dateStr,formatter);
     }
 
 }
