@@ -8,7 +8,7 @@ import java.util.Scanner;
 public class TravelPlanner {
 
     private static final String pattern = "dd/MM/yyyy";
-    private static final  DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
 
     //calculate the duration of trip in days
     public static long calculateTripDuration(LocalDate departureDate, LocalDate returnDate) {
@@ -20,24 +20,23 @@ public class TravelPlanner {
     //validate method for departure, return dates
     public static boolean validateTravelDates(LocalDate departureDate, LocalDate returnDate) {
 
-
         LocalDate todayDate = LocalDate.now();
 
-        if(departureDate.isBefore(todayDate)){
-            
+        if (departureDate.isBefore(todayDate)) {
+
             System.out.println("Departure date should not be in the past");
             return false;
-            
+
         }
 
-        if(departureDate.isAfter(returnDate) || departureDate.isEqual(returnDate)){
-            
+        if (departureDate.isAfter(returnDate) || departureDate.isEqual(returnDate)) {
+
             System.out.println("Return date should be after departure date");
             return false;
         }
 
-        if(calculateTripDuration(departureDate, returnDate) > 90){
-            
+        if (calculateTripDuration(departureDate, returnDate) > 90) {
+
             System.out.println("Trip should not be longer than 90 days");
             return false;
         }
@@ -47,31 +46,31 @@ public class TravelPlanner {
     }
 
     //Calculates hotel check-in and check-out dates based on travel dates
-    public static String calculateHotelDates(LocalDate departureDate, LocalDate returnDate){
+    public static String calculateHotelDates(LocalDate departureDate, LocalDate returnDate) {
 
         String checkInDate = departureDate.format(formatter);
         String checkOutDate = returnDate.format(formatter);
 
         return "Hotel CheckIn Date: " + checkInDate + " Hotel CheckOut Date: " + checkOutDate;
-        
-    } 
+
+    }
 
     //Checks if a trip overlaps with a specific holiday
-    public static boolean holidayOverlap (LocalDate departureDate, LocalDate returnDate, LocalDate holiday){
+    public static boolean holidayOverlap(LocalDate departureDate, LocalDate returnDate, LocalDate holiday) {
 
-        return (holiday.isEqual(departureDate) || holiday.isEqual(returnDate)||
-        (holiday.isAfter(departureDate) && holiday.isBefore(returnDate)));
+        return (holiday.isEqual(departureDate) || holiday.isEqual(returnDate)
+                || (holiday.isAfter(departureDate) && holiday.isBefore(returnDate)));
     }
 
     //Parses a date string into a LocalDate object
-    private static LocalDate parseDate (String dateStr) throws DateTimeParseException {
+    private static LocalDate parseDate(String dateStr) throws DateTimeParseException {
 
-        return LocalDate.parse(dateStr,formatter);
+        return LocalDate.parse(dateStr, formatter);
     }
 
-    public static void main (String []args){
+    public static void main(String[] args) {
 
-        boolean running =  true;
+        boolean running = true;
         Scanner scanner = new Scanner(System.in);
         int choice;
 
@@ -80,7 +79,7 @@ public class TravelPlanner {
 
         System.out.println("All dates should be entered in format dd/MM/yyyy");
 
-        while(running){
+        while (running) {
 
             System.out.println("\nChoose an option:");
             System.out.println("1. Calculate trip duration");
@@ -95,44 +94,94 @@ public class TravelPlanner {
             LocalDate departureDate;
             LocalDate returnDate;
 
-
-            if(choice == 5){
+            if (choice == 5) {
                 running = false;
                 return;
             }
 
-            switch (choice) {
-                case 1:
-                    System.out.println("\nEnter departure date: ");
-                    String departure = scanner.nextLine();
+            try {
+                switch (choice) {
+                    case 1:
+                        System.out.println("\nEnter departure date: ");
+                        String departure = scanner.nextLine();
 
-                    System.out.println("\nEnter return date: ");
-                    String returned = scanner.nextLine();
+                        System.out.println("\nEnter return date: ");
+                        String returned = scanner.nextLine();
 
-                    departureDate = parseDate(departure);
-                    returnDate = parseDate(returned);
+                        departureDate = parseDate(departure);
+                        returnDate = parseDate(returned);
 
-                    System.out.println("Trip duration: " + calculateTripDuration(departureDate, returnDate) + " days");
-                    break;
+                        System.out.println("Trip duration: " + calculateTripDuration(departureDate, returnDate) + " days");
+                        break;
 
-                case 2:
-                    System.out.println("\nEnter departure date: ");
-                    departureDate = parseDate(scanner.nextLine());
+                    case 2:
+                        System.out.println("\nEnter departure date: ");
+                        departureDate = parseDate(scanner.nextLine());
 
-                    System.out.println("\nEnter return date: ");
-                    returnDate = parseDate(scanner.nextLine());
+                        System.out.println("\nEnter return date: ");
+                        returnDate = parseDate(scanner.nextLine());
 
-                    boolean isValid =  validateTravelDates(departureDate, returnDate);
-                    if(isValid){
-                        System.out.println("\nTravel dates are valid!");
-                    }else{
-                        System.out.println("\nTravel dates are invalid!");
-                    }
+                        boolean isValid = validateTravelDates(departureDate, returnDate);
+                        if (isValid) {
+                            System.out.println("\nTravel dates are valid!");
+                        } else {
+                            System.out.println("\nTravel dates are invalid!");
+                        }
 
-                    break;
-                    
-                
+                        break;
+
+                    case 3:
+                        System.out.println("\nEnter departure date: ");
+                        departureDate = parseDate(scanner.nextLine());
+
+                        System.out.println("\nEnter return date: ");
+                        returnDate = parseDate(scanner.nextLine());
+
+                        if (validateTravelDates(departureDate, returnDate)) {
+                            calculateHotelDates(departureDate, returnDate);
+                        }
+
+                        break;
+
+                    case 4:
+                        System.out.println("\nEnter departure date: ");
+                        departureDate = parseDate(scanner.nextLine());
+
+                        System.out.println("\nEnter return date: ");
+                        returnDate = parseDate(scanner.nextLine());
+
+                        System.out.print("Enter holiday date (dd/MM/yyyy): ");
+                        LocalDate holiday = parseDate(scanner.nextLine());
+
+                        if (validateTravelDates(departureDate, returnDate)) {
+                            if (holidayOverlap(departureDate, returnDate, holiday)) {
+                                System.out.println("Holiday is overlapped: " + holiday.format(formatter));
+                            } else {
+                                System.out.println("No overlapping");
+                            }
+                        }
+
+                        break;
+
+                    case 5:
+                        running = false;
+                        System.out.println("Thank you for using Travel Planner!");
+                        break;
+
+                    default:
+                        System.out.println("Invalid input!");
+
+                }
+
+            } catch (DateTimeParseException e) {
+                System.out.println("Invalid Date type input " + e.getMessage());
+            }catch(Exception e){
+                System.out.println("Invalid type! " + e.getMessage());
             }
+
+
         }
+
+        scanner.close();
     }
 }
