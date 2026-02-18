@@ -114,6 +114,23 @@ public class TravelPlanner {
 
                     System.out.println("Trip duration: " + calculateTripDuration(departureDate, returnDate) + " days");
                     break;
+
+                case 2:
+                    System.out.println("\nEnter departure date: ");
+                    departureDate = parseDate(scanner.nextLine());
+
+                    System.out.println("\nEnter return date: ");
+                    returnDate = parseDate(scanner.nextLine());
+
+                    boolean isValid =  validateTravelDates(departureDate, returnDate);
+                    if(isValid){
+                        System.out.println("\nTravel dates are valid!");
+                    }else{
+                        System.out.println("\nTravel dates are invalid!");
+                    }
+
+                    break;
+                    
                 
             }
         }
