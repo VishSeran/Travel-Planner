@@ -16,7 +16,7 @@ public class TravelPlanner {
     }
 
     //validate method for departure, return dates
-    public static boolean validateTravelDays(LocalDate departureDate, LocalDate returnDate) {
+    public static boolean validateTravelDates(LocalDate departureDate, LocalDate returnDate) {
 
 
         LocalDate todayDate = LocalDate.now();
